@@ -1,0 +1,10 @@
+# default
+**/.git
+**/.svn
+**/.hg
+**/node_modules
+
+# add
+**/dist
+**/*.min.*
+**/*-lock.*
