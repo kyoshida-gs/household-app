@@ -12,6 +12,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import { Controller, useForm } from "react-hook-form";
+import type { TransactionType } from "@/types";
+import { useEffect } from "react";
 
 interface TransactionFormProps {
   onCloseForm: () => void;
@@ -34,7 +36,7 @@ const TransactionForm = ({
 }: TransactionFormProps) => {
   const formWidth = 320;
 
-  const { control } = useForm<TransactionFormValues>({
+  const { control, setValue, watch } = useForm<TransactionFormValues>({
     defaultValues: {
       type: "expense",
       date: currentDay,
@@ -43,6 +45,18 @@ const TransactionForm = ({
       content: "",
     },
   });
+
+  const incomeExpenseToggle = (type: TransactionType) => () => {
+    setValue("type", type);
+  };
+
+  // 収支タイプを監視
+  const currentType = watch("type");
+
+  useEffect(() => {
+    setValue("date", currentDay);
+  }, [currentDay]);
+
   return (
     <Box
       sx={{
@@ -83,14 +97,31 @@ const TransactionForm = ({
           <Controller
             name="type"
             control={control}
-            render={({ field }) => (
-              <ButtonGroup fullWidth>
-                <Button variant={"contained"} color="error">
-                  支出
-                </Button>
-                <Button>収入</Button>
-              </ButtonGroup>
-            )}
+            render={({ field }) => {
+              console.table(field);
+              return (
+                <ButtonGroup fullWidth>
+                  <Button
+                    variant={
+                      field.value === "expense" ? "contained" : "outlined"
+                    }
+                    color="error"
+                    onClick={incomeExpenseToggle("expense")}
+                  >
+                    支出
+                  </Button>
+                  <Button
+                    variant={
+                      field.value === "income" ? "contained" : "outlined"
+                    }
+                    color="primary"
+                    onClick={incomeExpenseToggle("income")}
+                  >
+                    収入
+                  </Button>
+                </ButtonGroup>
+              );
+            }}
           />
 
           {/* 日付 */}
@@ -143,7 +174,12 @@ const TransactionForm = ({
           />
 
           {/* 保存ボタン */}
-          <Button type="submit" variant="contained" color={"primary"} fullWidth>
+          <Button
+            type="submit"
+            variant="contained"
+            color={currentType === "expense" ? "error" : "primary"}
+            fullWidth
+          >
             保存
           </Button>
         </Stack>
