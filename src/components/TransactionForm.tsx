@@ -1,3 +1,4 @@
+import { useEffect, useState, type JSX } from "react";
 import {
   Box,
   Button,
@@ -9,16 +10,31 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
+
 import CloseIcon from "@mui/icons-material/Close";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
-import { Controller, useForm } from "react-hook-form";
-import type { TransactionType } from "@/types";
-import { useEffect } from "react";
+import AlarmIcon from "@mui/icons-material/Alarm";
+import AddHomeIcon from "@mui/icons-material/AddHome";
+import Diversity3Icon from "@mui/icons-material/Diversity3";
+import SportsTennisIcon from "@mui/icons-material/SportsTennis";
+import TrainIcon from "@mui/icons-material/Train";
+
+import WorkIcon from "@mui/icons-material/Work";
+import SavingsIcon from "@mui/icons-material/Savings";
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
+
+import type { ExpenseCategory, IncomeCategory, TransactionType } from "@/types";
 
 interface TransactionFormProps {
   onCloseForm: () => void;
   isEntryDrawerOpen: boolean;
   currentDay: string;
+}
+
+interface CategoryItem {
+  label: string;
+  icon: JSX.Element;
 }
 
 interface TransactionFormValues {
@@ -35,6 +51,24 @@ const TransactionForm = ({
   currentDay,
 }: TransactionFormProps) => {
   const formWidth = 320;
+
+  const expenseCategories: CategoryItem[] = [
+    { label: "食費", icon: <FastfoodIcon fontSize="small" /> },
+    { label: "日用品", icon: <AlarmIcon fontSize="small" /> },
+    { label: "住居費", icon: <AddHomeIcon fontSize="small" /> },
+    { label: "交際費", icon: <Diversity3Icon fontSize="small" /> },
+    { label: "娯楽", icon: <SportsTennisIcon fontSize="small" /> },
+    { label: "交通費", icon: <TrainIcon fontSize="small" /> },
+  ];
+
+  const incomeCategories: CategoryItem[] = [
+    { label: "給与", icon: <WorkIcon fontSize="small" /> },
+    { label: "副収入", icon: <AddBusinessIcon fontSize="small" /> },
+    { label: "お小遣い", icon: <SavingsIcon fontSize="small" /> },
+  ];
+
+  const [categories, setCategories] =
+    useState<CategoryItem[]>(expenseCategories);
 
   const { control, setValue, watch } = useForm<TransactionFormValues>({
     defaultValues: {
@@ -54,8 +88,14 @@ const TransactionForm = ({
   const currentType = watch("type");
 
   useEffect(() => {
-    setValue("date", currentDay);
-  }, [currentDay]);
+    const newCategories =
+      currentType === "expense" ? expenseCategories : incomeCategories;
+    console.table(newCategories);
+    setCategories(newCategories);
+  }, [currentType]);
+  // useEffect(() => {
+  //   setValue("date", currentDay);
+  // }, [currentDay]);
 
   return (
     <Box
@@ -98,7 +138,6 @@ const TransactionForm = ({
             name="type"
             control={control}
             render={({ field }) => {
-              console.table(field);
               return (
                 <ButtonGroup fullWidth>
                   <Button
@@ -143,15 +182,14 @@ const TransactionForm = ({
             name="category"
             control={control}
             render={({ field }) => (
-              <>
-                <TextField label="カテゴリ" type="select" {...field} />
-                <MenuItem value={"食費"}>
-                  <ListItemIcon>
-                    <FastfoodIcon />
-                  </ListItemIcon>
-                  食費
-                </MenuItem>
-              </>
+              <TextField label="カテゴリ" type="select" {...field} select>
+                {categories.map((category) => (
+                  <MenuItem key={category.label} value={category.label}>
+                    <ListItemIcon>{category.icon}</ListItemIcon>
+                    {category.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             )}
           />
 
