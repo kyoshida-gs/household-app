@@ -34,7 +34,6 @@ export default function App() {
           } as Transaction;
         });
 
-        console.log(transactionsData);
         setTransactions(transactionsData);
       } catch (error) {
         if (isFirestoreError(error)) {
@@ -50,7 +49,7 @@ export default function App() {
   const monthlyTransactions = transactions.filter((transaction) => {
     return transaction.date.startsWith(formatMonth(currentMonth));
   });
-  console.log("monthlyTransactions", monthlyTransactions);
+  // console.log("monthlyTransactions", monthlyTransactions);
 
   return (
     <ThemeProvider theme={theme}>
@@ -60,7 +59,12 @@ export default function App() {
           <Route path="/" element={<AppLayout />}>
             <Route
               path="/"
-              element={<Home monthlyTransactions={monthlyTransactions} />}
+              element={
+                <Home
+                  monthlyTransactions={monthlyTransactions}
+                  setCurrentMonth={setCurrentMonth}
+                />
+              }
             />
             <Route path="/report" element={<Report />} />
             <Route path="*" element={<NoMatch />} />
