@@ -58,6 +58,7 @@ export default function Home({
         />
         <TransactionForm
           onCloseForm={closeForm}
+          currentDay={currentDay}
           isEntryDrawerOpen={isEntryDrawerOpen}
         />
       </Box>
