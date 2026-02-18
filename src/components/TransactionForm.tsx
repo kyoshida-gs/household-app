@@ -90,7 +90,6 @@ const TransactionForm = ({
   useEffect(() => {
     const newCategories =
       currentType === "expense" ? expenseCategories : incomeCategories;
-    console.table(newCategories);
     setCategories(newCategories);
   }, [currentType]);
   // useEffect(() => {
@@ -198,7 +197,16 @@ const TransactionForm = ({
             name="amount"
             control={control}
             render={({ field }) => (
-              <TextField label="金額" type="number" {...field} />
+              <TextField
+                {...field}
+                value={field.value <= 0 ? "" : field.value}
+                onChange={(e) => {
+                  const newValue = parseInt(e.target.value, 10) || 0;
+                  field.onChange(newValue);
+                }}
+                label="金額"
+                type="number"
+              />
             )}
           />
 
