@@ -12,11 +12,10 @@ import {
   Typography,
 } from "@mui/material";
 
-//アイコン
 import NotesIcon from "@mui/icons-material/Notes";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import FastfoodIcon from "@mui/icons-material/Fastfood";
 import DailySummary from "./DailySummary";
+
 import type { Transaction } from "@/types";
 import { formatCurrency } from "@/utils/formatting";
 import IconComponents from "./common/IconComponents";
@@ -84,9 +83,9 @@ export default function TransactionMenu({
         <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
           <List aria-label="取引履歴">
             <Stack spacing={2}>
-              {dailyTransactions.map((transaction) => {
+              {dailyTransactions.map((transaction, index) => {
                 return (
-                  <ListItem disablePadding>
+                  <ListItem disablePadding key={index}>
                     <Card
                       sx={{
                         width: "100%",
