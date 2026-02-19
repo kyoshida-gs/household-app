@@ -24,12 +24,14 @@ interface TransactionMenuProps {
   dailyTransactions: Transaction[];
   currentDay: string;
   onAddTransactionForm: () => void;
+  onSelectTransaction: (transaction: Transaction) => void;
 }
 
 export default function TransactionMenu({
   dailyTransactions,
   currentDay,
   onAddTransactionForm,
+  onSelectTransaction,
 }: TransactionMenuProps) {
   const menuDrawerWidth = 320;
   return (
@@ -83,9 +85,9 @@ export default function TransactionMenu({
         <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
           <List aria-label="取引履歴">
             <Stack spacing={2}>
-              {dailyTransactions.map((transaction, index) => {
+              {dailyTransactions.map((transaction) => {
                 return (
-                  <ListItem disablePadding key={index}>
+                  <ListItem disablePadding key={transaction.id}>
                     <Card
                       sx={{
                         width: "100%",
@@ -94,6 +96,7 @@ export default function TransactionMenu({
                             ? (theme) => theme.palette.incomeColor.light
                             : (theme) => theme.palette.expenseColor.light,
                       }}
+                      onClick={() => onSelectTransaction(transaction)}
                     >
                       <CardActionArea>
                         <CardContent>

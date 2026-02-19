@@ -1,3 +1,6 @@
+import type { output } from "zod";
+import type { transactionSchema } from "@/validations/schema";
+
 export type TransactionType = "income" | "expense";
 export type IncomeCategory = "給与" | "副収入" | "お小遣い";
 export type ExpenseCategory =
