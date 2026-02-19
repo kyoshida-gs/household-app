@@ -12,7 +12,7 @@ interface MonthlySummaryProps {
 export default function MonthlySummary({
   monthlyTransactions,
 }: MonthlySummaryProps) {
-  console.log("MonthlySummary: ", monthlyTransactions);
+  // console.log("MonthlySummary: ", monthlyTransactions);
 
   const { income, expense, balance } = financeCalculations(monthlyTransactions);
 

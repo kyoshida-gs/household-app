@@ -85,7 +85,7 @@ export default function Calendar({
 
   // 日付を選択した時の処理
   const handleDateClick = (dateInfo: DateClickArg) => {
-    console.log("dateInfo: ", dateInfo);
+    // console.log("dateInfo: ", dateInfo);
     setCurrentDay(dateInfo.dateStr);
   };
 

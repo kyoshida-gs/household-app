@@ -26,6 +26,10 @@ import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 
 import type { ExpenseCategory, IncomeCategory, TransactionType } from "@/types";
 
+import type { z } from "zod";
+import { transactionSchema } from "@/validations/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 interface TransactionFormProps {
   onCloseForm: () => void;
   isEntryDrawerOpen: boolean;
@@ -70,7 +74,13 @@ const TransactionForm = ({
   const [categories, setCategories] =
     useState<CategoryItem[]>(expenseCategories);
 
-  const { control, setValue, watch } = useForm<TransactionFormValues>({
+  const {
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<z.input<typeof transactionSchema>>({
     defaultValues: {
       type: "expense",
       date: currentDay,
@@ -78,7 +88,9 @@ const TransactionForm = ({
       category: "",
       content: "",
     },
+    resolver: zodResolver(transactionSchema),
   });
+  // console.log("errors", errors);
 
   const incomeExpenseToggle = (type: TransactionType) => () => {
     setValue("type", type);
@@ -92,9 +104,17 @@ const TransactionForm = ({
       currentType === "expense" ? expenseCategories : incomeCategories;
     setCategories(newCategories);
   }, [currentType]);
-  // useEffect(() => {
-  //   setValue("date", currentDay);
-  // }, [currentDay]);
+
+  // カレンダーの日付と入力フォームの日付の連動
+  useEffect(() => {
+    setValue("date", currentDay);
+  }, [currentDay]);
+
+  const onSubmit = (data: z.input<typeof transactionSchema>) => {
+    // 送信時点では zod により検証済みのため category は "" ではない
+    const validData = data as z.output<typeof transactionSchema>;
+    console.log(validData);
+  };
 
   return (
     <Box
@@ -130,7 +150,7 @@ const TransactionForm = ({
         </IconButton>
       </Box>
       {/* フォーム要素 */}
-      <Box component={"form"}>
+      <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           {/* 収支切り替えボタン */}
           <Controller
@@ -172,6 +192,8 @@ const TransactionForm = ({
                 label="日付"
                 type="date"
                 InputLabelProps={{ shrink: true }}
+                error={!!errors.date}
+                helperText={errors.date?.message}
               />
             )}
           />
@@ -181,9 +203,16 @@ const TransactionForm = ({
             name="category"
             control={control}
             render={({ field }) => (
-              <TextField label="カテゴリ" type="select" {...field} select>
-                {categories.map((category) => (
-                  <MenuItem key={category.label} value={category.label}>
+              <TextField
+                {...field}
+                select
+                label="カテゴリ"
+                type="select"
+                error={!!errors.category}
+                helperText={errors.category?.message}
+              >
+                {categories.map((category, index) => (
+                  <MenuItem key={index} value={category.label}>
                     <ListItemIcon>{category.icon}</ListItemIcon>
                     {category.label}
                   </MenuItem>
@@ -206,6 +235,8 @@ const TransactionForm = ({
                 }}
                 label="金額"
                 type="number"
+                error={!!errors.amount}
+                helperText={errors.amount?.message}
               />
             )}
           />
@@ -215,7 +246,13 @@ const TransactionForm = ({
             name="content"
             control={control}
             render={({ field }) => (
-              <TextField label="内容" type="text" {...field} />
+              <TextField
+                label="内容"
+                type="text"
+                {...field}
+                error={!!errors.content}
+                helperText={errors.content?.message}
+              />
             )}
           />
 
