@@ -38,12 +38,14 @@ export default defineConfig([
     settings: {
       react: { version: "detect" },
     },
-    extends: [
-      react.configs.flat.recommended,
-      reactHooks.configs["recommended-latest"],
-      reactRefresh.configs.vite,
-    ],
+    plugins: {
+      "react-hooks": reactHooks,
+      "react-refresh": reactRefresh,
+    },
+    extends: [react.configs.flat.recommended],
     rules: {
+      ...reactHooks.configs.recommended.rules,
+      ...reactRefresh.configs.recommended.rules,
       "react/react-in-jsx-scope": "off",
       "react/jsx-uses-react": "off",
     },

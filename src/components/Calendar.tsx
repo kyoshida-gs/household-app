@@ -80,7 +80,9 @@ export default function Calendar({
     const currentMonth = datesetInfo.view.currentStart;
     setCurrentMonth(currentMonth);
     const todayDate = new Date();
-    isSameMonth(todayDate, currentMonth) && setCurrentDay(today);
+    if (isSameMonth(todayDate, currentMonth)) {
+      setCurrentDay(today);
+    }
   };
 
   // 日付を選択した時の処理

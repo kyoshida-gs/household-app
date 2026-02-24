@@ -24,12 +24,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import SavingsIcon from "@mui/icons-material/Savings";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 
-import type {
-  ExpenseCategory,
-  IncomeCategory,
-  Transaction,
-  TransactionType,
-} from "@/types";
+import type { Transaction, TransactionType } from "@/types";
 
 import type { z } from "zod";
 import { transactionSchema } from "@/validations/schema";
@@ -173,9 +168,11 @@ const TransactionForm = ({
       );
       // console.log("categoryExists: ", categoryExists);
 
-      categoryExists
-        ? setValue("category", selectedTransaction.category)
-        : setValue("category", "");
+      if (categoryExists) {
+        setValue("category", selectedTransaction.category);
+      } else {
+        setValue("category", "");
+      }
     }
   }, [selectedTransaction, categories]);
 
