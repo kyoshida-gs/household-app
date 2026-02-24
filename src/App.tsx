@@ -28,6 +28,7 @@ import type { transactionSchema } from "./validations/schema";
 export default function App() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(true);
 
   function isFirestoreError(
     err: unknown,
@@ -55,12 +56,18 @@ export default function App() {
         } else {
           console.error("一般的なエラー: ", error);
         }
+      } finally {
+        const sleep = (ms: number) =>
+          new Promise((resolve) => setTimeout(resolve, ms));
+        await sleep(3000);
+
+        setIsLoading(false);
       }
     };
     fetchTransactions();
   }, []);
 
-  // 月ごとのデータを取得
+  // 対象月の取引データを取得
   const monthlyTransactions = transactions.filter((transaction) => {
     return transaction.date.startsWith(formatMonth(currentMonth));
   });
@@ -160,6 +167,8 @@ export default function App() {
                 <Report
                   currentMonth={currentMonth}
                   setCurrentMonth={setCurrentMonth}
+                  monthlyTransactions={monthlyTransactions}
+                  isLoading={isLoading}
                 />
               }
             />

@@ -10,7 +10,7 @@ import { Outlet } from "react-router-dom";
 import SideBar from "../common/SideBar";
 const drawerWidth = 240;
 
-export default function ResponsiveDrawer() {
+export default function AppLayout() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
 
@@ -32,7 +32,7 @@ export default function ResponsiveDrawer() {
   return (
     <Box
       sx={{
-        display: "flex",
+        display: { md: "flex" },
         bgcolor: (theme) => theme.palette.grey[100],
         minHeight: "100vh",
         width: "100%",
@@ -78,7 +78,7 @@ export default function ResponsiveDrawer() {
           flexGrow: 1,
           p: 3,
           pt: { xs: 10, sm: 12 },
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: { md: `calc(100% - ${drawerWidth}px)` },
         }}
       >
         <Outlet />

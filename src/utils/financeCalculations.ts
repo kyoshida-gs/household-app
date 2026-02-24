@@ -1,8 +1,6 @@
 import type { Transaction, Balance } from "@/types";
 
-export default function financeCalculations(
-  transactions: Transaction[],
-): Balance {
+export function financeCalculations(transactions: Transaction[]): Balance {
   return transactions.reduce(
     (acc, transaction) => {
       if (transaction.type === "income") {
