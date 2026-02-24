@@ -21,6 +21,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@mui/icons-material": "^6.5.0",
     "@mui/material": "^6.5.0",
+    "@mui/x-date-pickers": "^8.27.2",
     "date-fns": "^4.1.0",
     "firebase": "^12.9.0",
     "react": "^19.2.0",
