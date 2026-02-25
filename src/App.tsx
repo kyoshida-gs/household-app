@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
-// import "@/index.css";
-
 import Home from "@/pages/Home";
 import Report from "@/pages/Report";
 import NoMatch from "@/pages/NoMatch";
@@ -57,10 +55,6 @@ export default function App() {
           console.error("一般的なエラー: ", error);
         }
       } finally {
-        // const sleep = (ms: number) =>
-        //   new Promise((resolve) => setTimeout(resolve, ms));
-        // await sleep(3000);
-
         setIsLoading(false);
       }
     };
@@ -100,14 +94,19 @@ export default function App() {
   };
 
   // 取引データを削除
-  const handleDeleteTransaction = async (id: string) => {
+  const handleDeleteTransaction = async (ids: string | readonly string[]) => {
     try {
-      await deleteDoc(doc(db, "Transactions", id));
-      const filterdTransactions = transactions.filter(
-        (transaction) => transaction.id !== id,
+      const isdToDelete = Array.isArray(ids) ? ids : [ids];
+      // console.log("isdToDelete: ", isdToDelete);
+
+      for (const id of isdToDelete) {
+        await deleteDoc(doc(db, "Transactions", id));
+      }
+
+      const filteredTransactions = transactions.filter(
+        (transaction) => !isdToDelete.includes(transaction.id),
       );
-      setTransactions(filterdTransactions);
-      console.log("Document deleted with ID: ", id);
+      setTransactions(filteredTransactions);
     } catch (error) {
       if (isFirestoreError(error)) {
         console.error("Firestoreのエラー: ", error);
@@ -169,6 +168,7 @@ export default function App() {
                   setCurrentMonth={setCurrentMonth}
                   monthlyTransactions={monthlyTransactions}
                   isLoading={isLoading}
+                  onDeleteTransaction={handleDeleteTransaction}
                 />
               }
             />

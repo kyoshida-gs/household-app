@@ -17,7 +17,7 @@ interface HomeProps {
   onSaveTransaction: (
     transaction: z.input<typeof transactionSchema>,
   ) => Promise<void>;
-  onDeleteTransaction: (id: string) => Promise<void>;
+  onDeleteTransaction: (ids: string | readonly string[]) => Promise<void>;
   onUpdateTransaction: (
     transaction: z.input<typeof transactionSchema>,
     id: string,
