@@ -18,6 +18,7 @@ interface CalendarProps {
   setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
   currentDay: string;
   today: string;
+  handleDateClick: (dateInfo: DateClickArg) => void;
 }
 
 export default function Calendar({
@@ -26,6 +27,7 @@ export default function Calendar({
   setCurrentDay,
   currentDay,
   today,
+  handleDateClick,
 }: CalendarProps) {
   const theme = useTheme();
   const dailyBalances = calculateDailyBalances(monthlyTransactions);
@@ -83,12 +85,6 @@ export default function Calendar({
     if (isSameMonth(todayDate, currentMonth)) {
       setCurrentDay(today);
     }
-  };
-
-  // 日付を選択した時の処理
-  const handleDateClick = (dateInfo: DateClickArg) => {
-    // console.log("dateInfo: ", dateInfo);
-    setCurrentDay(dateInfo.dateStr);
   };
 
   return (
