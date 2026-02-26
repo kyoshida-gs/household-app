@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, type JSX } from "react";
 import {
   Box,
   Button,
@@ -12,7 +12,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Controller, useForm, type SubmitHandler } from "react-hook-form";
+import {
+  Controller,
+  useForm,
+  useWatch,
+  type SubmitHandler,
+} from "react-hook-form";
 
 import CloseIcon from "@mui/icons-material/Close";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
@@ -58,7 +63,22 @@ interface CategoryItem {
   icon: JSX.Element;
 }
 
-const TransactionForm = ({
+const expenseCategories: CategoryItem[] = [
+  { label: "食費", icon: <FastfoodIcon fontSize="small" /> },
+  { label: "日用品", icon: <AlarmIcon fontSize="small" /> },
+  { label: "住居費", icon: <AddHomeIcon fontSize="small" /> },
+  { label: "交際費", icon: <Diversity3Icon fontSize="small" /> },
+  { label: "娯楽", icon: <SportsTennisIcon fontSize="small" /> },
+  { label: "交通費", icon: <TrainIcon fontSize="small" /> },
+];
+
+const incomeCategories: CategoryItem[] = [
+  { label: "給与", icon: <WorkIcon fontSize="small" /> },
+  { label: "副収入", icon: <AddBusinessIcon fontSize="small" /> },
+  { label: "お小遣い", icon: <SavingsIcon fontSize="small" /> },
+];
+
+export default function TransactionForm({
   onCloseForm,
   isEntryDrawerOpen,
   currentDay,
@@ -70,31 +90,12 @@ const TransactionForm = ({
   isMobile,
   isDialogOpen,
   setIsDialogOpen,
-}: TransactionFormProps) => {
+}: TransactionFormProps) {
   const formWidth = 320;
-
-  const expenseCategories: CategoryItem[] = [
-    { label: "食費", icon: <FastfoodIcon fontSize="small" /> },
-    { label: "日用品", icon: <AlarmIcon fontSize="small" /> },
-    { label: "住居費", icon: <AddHomeIcon fontSize="small" /> },
-    { label: "交際費", icon: <Diversity3Icon fontSize="small" /> },
-    { label: "娯楽", icon: <SportsTennisIcon fontSize="small" /> },
-    { label: "交通費", icon: <TrainIcon fontSize="small" /> },
-  ];
-
-  const incomeCategories: CategoryItem[] = [
-    { label: "給与", icon: <WorkIcon fontSize="small" /> },
-    { label: "副収入", icon: <AddBusinessIcon fontSize="small" /> },
-    { label: "お小遣い", icon: <SavingsIcon fontSize="small" /> },
-  ];
-
-  const [categories, setCategories] =
-    useState<CategoryItem[]>(expenseCategories);
 
   const {
     control,
     setValue,
-    watch,
     formState: { errors },
     handleSubmit,
     reset,
@@ -115,19 +116,21 @@ const TransactionForm = ({
     setValue("category", "");
   };
 
-  // 収支タイプを監視
-  const currentType = watch("type");
+  // 収支タイプを監視（useWatch で React Compiler の incompatible-library を回避）
+  const currentType = useWatch({
+    control,
+    name: "type",
+    defaultValue: "expense",
+  });
 
-  useEffect(() => {
-    const newCategories =
-      currentType === "expense" ? expenseCategories : incomeCategories;
-    setCategories(newCategories);
-  }, [currentType]);
+  // 収支タイプに応じてカテゴリを導出（state ではなく render 時に算出）
+  const categories =
+    currentType === "expense" ? expenseCategories : incomeCategories;
 
   // カレンダーの日付と入力フォームの日付の連動
   useEffect(() => {
     setValue("date", currentDay);
-  }, [currentDay]);
+  }, [currentDay, setValue]);
 
   const onSubmit: SubmitHandler<z.input<typeof transactionSchema>> = (data) => {
     console.log("data: ", data);
@@ -177,7 +180,7 @@ const TransactionForm = ({
         setValue("category", "");
       }
     }
-  }, [selectedTransaction, categories]);
+  }, [selectedTransaction, categories, setValue]);
 
   // 選択された取引のデータをフォームに設定
   useEffect(() => {
@@ -196,7 +199,7 @@ const TransactionForm = ({
         content: "",
       });
     }
-  }, [selectedTransaction]);
+  }, [selectedTransaction, currentDay, setValue, reset]);
 
   const handleDelete = () => {
     if (selectedTransaction) {
@@ -392,5 +395,4 @@ const TransactionForm = ({
       )}
     </>
   );
-};
-export default TransactionForm;
+}
