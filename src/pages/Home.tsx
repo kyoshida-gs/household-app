@@ -9,7 +9,7 @@ import TransactionForm from "@/components/TransactionForm";
 import TransactionMenu from "@/components/TransactionMenu";
 import type { Transaction } from "@/types";
 
-import { useAppContext } from "@/context/AppContext";
+import { useAppContext } from "@/hooks/useAppContext";
 import useMonthlyTransaction from "@/hooks/useMonthlyTransaction";
 
 export default function Home() {

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { useAppContext } from "@/context/AppContext";
-import type { Transaction } from "@/types";
+import { useAppContext } from "@/hooks/useAppContext";
 import { formatMonth } from "@/utils/formatting";
+import type { Transaction } from "@/types";
 
 export default function useMonthlyTransaction(): Transaction[] {
   const { transactions, currentMonth } = useAppContext();

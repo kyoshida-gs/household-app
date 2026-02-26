@@ -5,7 +5,7 @@ import NoMatch from "@/pages/NoMatch";
 import AppLayout from "./components/layout/AppLayout";
 import { theme } from "./theme/theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { AppContextProvider } from "@/context/AppContext";
+import { AppContextProvider } from "@/context/AppContextProvider";
 
 export default function App() {
   return (

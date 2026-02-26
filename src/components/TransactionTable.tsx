@@ -21,7 +21,7 @@ import { formatCurrency } from "@/utils/formatting";
 import IconComponents from "@/components/common/IconComponents";
 import { compareDesc, parseISO } from "date-fns";
 import useMonthlyTransaction from "@/hooks/useMonthlyTransaction";
-import { useAppContext } from "@/context/AppContext";
+import { useAppContext } from "@/hooks/useAppContext";
 
 // ヘッダー
 interface TransactionTableHeadProps {

@@ -20,7 +20,7 @@ import { Pie } from "react-chartjs-2";
 import type { ExpenseCategory, IncomeCategory, TransactionType } from "@/types";
 import { theme } from "@/theme/theme";
 import useMonthlyTransaction from "@/hooks/useMonthlyTransaction";
-import { useAppContext } from "@/context/AppContext";
+import { useAppContext } from "@/hooks/useAppContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

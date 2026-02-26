@@ -36,7 +36,7 @@ import type { Transaction, TransactionType } from "@/types";
 import type { z } from "zod";
 import { transactionSchema } from "@/validations/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAppContext } from "@/context/AppContext";
+import { useAppContext } from "@/hooks/useAppContext";
 
 interface TransactionFormProps {
   onCloseForm: () => void;

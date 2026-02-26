@@ -19,7 +19,7 @@ import DailySummary from "./DailySummary";
 import type { Transaction } from "@/types";
 import { formatCurrency } from "@/utils/formatting";
 import IconComponents from "./common/IconComponents";
-import { useAppContext } from "@/context/AppContext";
+import { useAppContext } from "@/hooks/useAppContext";
 
 interface TransactionMenuProps {
   dailyTransactions: Transaction[];

@@ -12,7 +12,7 @@ import interactionPlugin, {
 import { useTheme } from "@mui/material";
 import { isSameMonth } from "date-fns";
 import useMonthlyTransaction from "@/hooks/useMonthlyTransaction";
-import { useAppContext } from "@/context/AppContext";
+import { useAppContext } from "@/hooks/useAppContext";
 
 interface CalendarProps {
   setCurrentDay: React.Dispatch<React.SetStateAction<string>>;

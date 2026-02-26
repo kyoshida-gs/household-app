@@ -11,7 +11,7 @@ import { Bar } from "react-chartjs-2";
 import { calculateDailyBalances } from "@/utils/financeCalculations";
 import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
 import useMonthlyTransaction from "@/hooks/useMonthlyTransaction";
-import { useAppContext } from "@/context/AppContext";
+import { useAppContext } from "@/hooks/useAppContext";
 
 ChartJS.register(
   CategoryScale,

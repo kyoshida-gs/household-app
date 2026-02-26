@@ -14,7 +14,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase";
 import type { Transaction } from "@/types";
 import { isFirestoreError } from "@/utils/errorHandling";
-import { useAppContext } from "@/context/AppContext";
+import { useAppContext } from "@/hooks/useAppContext";
 
 export default function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -62,7 +62,7 @@ export default function AppLayout() {
       }
     };
     fetchTransactions();
-  }, []);
+  }, [setIsLoading, setTransactions]);
 
   return (
     <Box
