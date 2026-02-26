@@ -36,24 +36,16 @@ import type { Transaction, TransactionType } from "@/types";
 import type { z } from "zod";
 import { transactionSchema } from "@/validations/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAppContext } from "@/context/AppContext";
 
 interface TransactionFormProps {
   onCloseForm: () => void;
   isEntryDrawerOpen: boolean;
   currentDay: string;
-  onSaveTransaction: (
-    transaction: z.input<typeof transactionSchema>,
-  ) => Promise<void>;
   selectedTransaction: Transaction | null;
-  onDeleteTransaction: (id: string) => Promise<void>;
   setSelectedTransaction: React.Dispatch<
     React.SetStateAction<Transaction | null>
   >;
-  onUpdateTransaction: (
-    transaction: z.input<typeof transactionSchema>,
-    id: string,
-  ) => Promise<void>;
-  isMobile: boolean;
   isDialogOpen: boolean;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -82,15 +74,14 @@ export default function TransactionForm({
   onCloseForm,
   isEntryDrawerOpen,
   currentDay,
-  onSaveTransaction,
   selectedTransaction,
-  onDeleteTransaction,
   setSelectedTransaction,
-  onUpdateTransaction,
-  isMobile,
   isDialogOpen,
   setIsDialogOpen,
 }: TransactionFormProps) {
+  const { isMobile } = useAppContext();
+  const { onSaveTransaction, onDeleteTransaction, onUpdateTransaction } =
+    useAppContext();
   const formWidth = 320;
 
   const {
@@ -133,7 +124,7 @@ export default function TransactionForm({
   }, [currentDay, setValue]);
 
   const onSubmit: SubmitHandler<z.input<typeof transactionSchema>> = (data) => {
-    console.log("data: ", data);
+    // console.log("data: ", data);
 
     if (selectedTransaction) {
       onUpdateTransaction(data, selectedTransaction.id)

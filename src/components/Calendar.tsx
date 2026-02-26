@@ -4,17 +4,17 @@ import jaLocale from "@fullcalendar/core/locales/ja";
 import "@/calendar.css";
 import type { DatesSetArg, EventContentArg } from "@fullcalendar/core/index.js";
 import { calculateDailyBalances } from "@/utils/financeCalculations";
-import type { Balance, CalendarContent, Transaction } from "@/types";
+import type { Balance, CalendarContent } from "@/types";
 import { formatCurrency } from "@/utils/formatting";
 import interactionPlugin, {
   type DateClickArg,
 } from "@fullcalendar/interaction";
 import { useTheme } from "@mui/material";
 import { isSameMonth } from "date-fns";
+import useMonthlyTransaction from "@/hooks/useMonthlyTransaction";
+import { useAppContext } from "@/context/AppContext";
 
 interface CalendarProps {
-  monthlyTransactions: Transaction[];
-  setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
   setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
   currentDay: string;
   today: string;
@@ -22,13 +22,14 @@ interface CalendarProps {
 }
 
 export default function Calendar({
-  monthlyTransactions,
-  setCurrentMonth,
   setCurrentDay,
   currentDay,
   today,
   handleDateClick,
 }: CalendarProps) {
+  const monthlyTransactions = useMonthlyTransaction();
+  const { setCurrentMonth } = useAppContext();
+
   const theme = useTheme();
   const dailyBalances = calculateDailyBalances(monthlyTransactions);
   // console.log("dailyBalances: ", dailyBalances);

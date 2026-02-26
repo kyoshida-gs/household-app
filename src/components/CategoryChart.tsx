@@ -17,25 +17,17 @@ import {
   type ChartData,
 } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import type {
-  ExpenseCategory,
-  IncomeCategory,
-  Transaction,
-  TransactionType,
-} from "@/types";
+import type { ExpenseCategory, IncomeCategory, TransactionType } from "@/types";
 import { theme } from "@/theme/theme";
+import useMonthlyTransaction from "@/hooks/useMonthlyTransaction";
+import { useAppContext } from "@/context/AppContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface CategoryChartProps {
-  monthlyTransactions: Transaction[];
-  isLoading: boolean;
-}
+export default function CategoryChart() {
+  const monthlyTransactions = useMonthlyTransaction();
+  const { isLoading } = useAppContext();
 
-export default function CategoryChart({
-  monthlyTransactions,
-  isLoading,
-}: CategoryChartProps) {
   const [selectedType, setSelectedType] = useState<TransactionType>("expense");
   const handleChangeType = (event: SelectChangeEvent<TransactionType>) => {
     setSelectedType(event.target.value as TransactionType);
@@ -101,26 +93,10 @@ export default function CategoryChart({
         backgroundColor: categoryLabels.map((category) =>
           getCategoryColor(category),
         ),
-        // backgroundColor: [
-        //   "rgba(255, 99, 132, 0.2)",
-        //   "rgba(54, 162, 235, 0.2)",
-        //   "rgba(255, 206, 86, 0.2)",
-        //   "rgba(75, 192, 192, 0.2)",
-        //   "rgba(153, 102, 255, 0.2)",
-        //   "rgba(255, 159, 64, 0.2)",
-        // ],
         borderColor:
           selectedType === "income"
             ? Object.values(incomeCategoryColor)
             : Object.values(expenseCategoryColor),
-        // borderColor: [
-        //   "rgba(255, 99, 132, 1)",
-        //   "rgba(54, 162, 235, 1)",
-        //   "rgba(255, 206, 86, 1)",
-        //   "rgba(75, 192, 192, 1)",
-        //   "rgba(153, 102, 255, 1)",
-        //   "rgba(255, 159, 64, 1)",
-        // ],
         borderWidth: 1,
       },
     ],

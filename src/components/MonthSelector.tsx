@@ -4,16 +4,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ja } from "date-fns/locale";
 import { addMonths, subMonths } from "date-fns";
+import { useAppContext } from "@/context/AppContext";
 
-interface MonthSelectorProps {
-  currentMonth: Date;
-  setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
-}
+export default function MonthSelector() {
+  const { currentMonth, setCurrentMonth } = useAppContext();
 
-export default function MonthSelector({
-  currentMonth,
-  setCurrentMonth,
-}: MonthSelectorProps) {
   const handlePreviousMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
   };

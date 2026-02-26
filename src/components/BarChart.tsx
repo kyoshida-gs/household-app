@@ -8,9 +8,10 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import type { Transaction } from "@/types";
 import { calculateDailyBalances } from "@/utils/financeCalculations";
 import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
+import useMonthlyTransaction from "@/hooks/useMonthlyTransaction";
+import { useAppContext } from "@/context/AppContext";
 
 ChartJS.register(
   CategoryScale,
@@ -21,15 +22,10 @@ ChartJS.register(
   Legend,
 );
 
-interface BarChartProps {
-  monthlyTransactions: Transaction[];
-  isLoading: boolean;
-}
+export default function BarChart() {
+  const monthlyTransactions = useMonthlyTransaction();
+  const { isLoading } = useAppContext();
 
-export default function BarChart({
-  monthlyTransactions,
-  isLoading,
-}: BarChartProps) {
   const theme = useTheme();
   const dailyBalances = calculateDailyBalances(monthlyTransactions);
   const dateLabels = Object.keys(dailyBalances).sort();

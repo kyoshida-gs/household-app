@@ -2,19 +2,13 @@ import { Card, CardContent, Grid, Stack, Typography } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import type { Transaction } from "@/types";
 import { financeCalculations } from "@/utils/financeCalculations";
 import { formatCurrency } from "@/utils/formatting";
+import useMonthlyTransaction from "@/hooks/useMonthlyTransaction";
 
-interface MonthlySummaryProps {
-  monthlyTransactions: Transaction[];
-}
-
-export default function MonthlySummary({
-  monthlyTransactions,
-}: MonthlySummaryProps) {
+export default function MonthlySummary() {
   // console.log("MonthlySummary: ", monthlyTransactions);
-
+  const monthlyTransactions = useMonthlyTransaction();
   const { income, expense, balance } = financeCalculations(monthlyTransactions);
 
   return (

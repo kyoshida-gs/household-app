@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Box, useMediaQuery, useTheme } from "@mui/material";
+import { useMemo, useState } from "react";
+import { Box } from "@mui/material";
 import { format } from "date-fns";
+import type { DateClickArg } from "@fullcalendar/interaction/index.js";
 
 import Calendar from "@/components/Calendar";
 import MonthlySummary from "@/components/MonthlySummary";
@@ -8,45 +9,28 @@ import TransactionForm from "@/components/TransactionForm";
 import TransactionMenu from "@/components/TransactionMenu";
 import type { Transaction } from "@/types";
 
-import type { transactionSchema } from "@/validations/schema";
-import type { z } from "zod";
-import type { DateClickArg } from "@fullcalendar/interaction/index.js";
+import { useAppContext } from "@/context/AppContext";
+import useMonthlyTransaction from "@/hooks/useMonthlyTransaction";
 
-interface HomeProps {
-  monthlyTransactions: Transaction[];
-  setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
-  onSaveTransaction: (
-    transaction: z.input<typeof transactionSchema>,
-  ) => Promise<void>;
-  onDeleteTransaction: (ids: string | readonly string[]) => Promise<void>;
-  onUpdateTransaction: (
-    transaction: z.input<typeof transactionSchema>,
-    id: string,
-  ) => Promise<void>;
-}
+export default function Home() {
+  const { isMobile } = useAppContext();
+  const monthlyTransactions = useMonthlyTransaction();
 
-export default function Home({
-  monthlyTransactions,
-  setCurrentMonth,
-  onSaveTransaction,
-  onDeleteTransaction,
-  onUpdateTransaction,
-}: HomeProps) {
   const today = format(new Date(), "yyyy-MM-dd");
   const [currentDay, setCurrentDay] = useState(today);
   const [isEntryDrawerOpen, setIsEntryDrawerOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // 1日分のデータを取得
-  const dailyTransactions = monthlyTransactions.filter((transaction) => {
-    return transaction.date === currentDay;
-  });
+  const dailyTransactions = useMemo(() => {
+    return monthlyTransactions.filter((transaction) => {
+      return transaction.date === currentDay;
+    });
+  }, [monthlyTransactions, currentDay]);
   // console.log("dailyTransactions: ", dailyTransactions);
 
   const closeForm = () => {
@@ -99,10 +83,8 @@ export default function Home({
     <Box sx={{ display: "flex" }}>
       {/* 左側コンテンツ */}
       <Box sx={{ flexGrow: 1 }}>
-        <MonthlySummary monthlyTransactions={monthlyTransactions} />
+        <MonthlySummary />
         <Calendar
-          monthlyTransactions={monthlyTransactions}
-          setCurrentMonth={setCurrentMonth}
           setCurrentDay={setCurrentDay}
           currentDay={currentDay}
           today={today}
@@ -117,7 +99,6 @@ export default function Home({
           currentDay={currentDay}
           onAddTransactionForm={handleAddTransactionForm}
           onSelectTransaction={handleSelectTransaction}
-          isMobile={isMobile}
           isMenuDrawerOpen={isMenuDrawerOpen}
           onCloseMobileDrawer={handleCloseMobileDrawer}
         />
@@ -125,12 +106,8 @@ export default function Home({
           onCloseForm={closeForm}
           currentDay={currentDay}
           isEntryDrawerOpen={isEntryDrawerOpen}
-          onSaveTransaction={onSaveTransaction}
           selectedTransaction={selectedTransaction}
-          onDeleteTransaction={onDeleteTransaction}
           setSelectedTransaction={setSelectedTransaction}
-          onUpdateTransaction={onUpdateTransaction}
-          isMobile={isMobile}
           isDialogOpen={isDialogOpen}
           setIsDialogOpen={setIsDialogOpen}
         />
