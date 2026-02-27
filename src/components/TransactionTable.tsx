@@ -312,10 +312,12 @@ export default function TransactionTable() {
                       align="left"
                       sx={{ display: "flex", alignItems: "center", gap: 1 }}
                     >
-                      {IconComponents[transaction.category]}
+                      {IconComponents()[transaction.category]}
                       {transaction.category}
                     </TableCell>
-                    <TableCell align="right">{transaction.amount}</TableCell>
+                    <TableCell align="right">
+                      &yen;{formatCurrency(transaction.amount)}
+                    </TableCell>
                     <TableCell align="left">{transaction.content}</TableCell>
                   </TableRow>
                 );

@@ -133,7 +133,7 @@ export default function TransactionMenu({
                           >
                             <Grid item xs={1}>
                               {/* icon */}
-                              {IconComponents[transaction.category]}
+                              {IconComponents()[transaction.category]}
                             </Grid>
                             <Grid item xs={2.5}>
                               <Typography
