@@ -176,7 +176,7 @@ export default function TransactionTable() {
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+  const handleClick = (id: string) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: readonly string[] = [];
 
@@ -195,7 +195,7 @@ export default function TransactionTable() {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
@@ -283,7 +283,7 @@ export default function TransactionTable() {
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, transaction.id)}
+                    onClick={() => handleClick(transaction.id)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}

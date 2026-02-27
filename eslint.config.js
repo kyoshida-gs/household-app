@@ -24,12 +24,21 @@ export default defineConfig([
   {
     files: ["**/*.{js,cjs,mjs}"],
     extends: [js.configs.recommended],
+    rules: {
+      "no-unused-vars": "warn",
+    },
   },
 
   // TypeScript Config
   {
     files: ["**/*.{ts,tsx,cts,mts}"],
     extends: [js.configs.recommended, tseslint.configs.recommended],
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { "args": "all" },
+      ],
+    },
   },
 
   // React Config
