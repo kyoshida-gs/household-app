@@ -40,7 +40,6 @@ import { useAppContext } from "@/hooks/useAppContext";
 
 interface TransactionFormProps {
   onCloseForm: () => void;
-  isEntryDrawerOpen: boolean;
   currentDay: string;
   selectedTransaction: Transaction | null;
   setSelectedTransaction: React.Dispatch<
@@ -72,17 +71,14 @@ const incomeCategories: CategoryItem[] = [
 
 export default function TransactionForm({
   onCloseForm,
-  isEntryDrawerOpen,
   currentDay,
   selectedTransaction,
   setSelectedTransaction,
   isDialogOpen,
   setIsDialogOpen,
 }: TransactionFormProps) {
-  const { isMobile } = useAppContext();
   const { onSaveTransaction, onDeleteTransaction, onUpdateTransaction } =
     useAppContext();
-  const formWidth = 320;
 
   const {
     control,
@@ -131,9 +127,7 @@ export default function TransactionForm({
         .then(() => {
           console.log("更新しました");
           setSelectedTransaction(null);
-          if (isMobile) {
-            setIsDialogOpen(false);
-          }
+          setIsDialogOpen(false);
         })
         .catch((errors) => {
           console.error("更新に失敗しました: ", errors);
@@ -195,9 +189,7 @@ export default function TransactionForm({
   const handleDelete = () => {
     if (selectedTransaction) {
       onDeleteTransaction(selectedTransaction?.id);
-      if (isMobile) {
-        setIsDialogOpen(false);
-      }
+      setIsDialogOpen(false);
       setSelectedTransaction(null);
     }
   };
@@ -349,41 +341,13 @@ export default function TransactionForm({
   );
 
   return (
-    <>
-      {isMobile ? (
-        // SP
-        <Dialog
-          open={isDialogOpen}
-          onClose={onCloseForm}
-          fullWidth
-          maxWidth={"sm"}
-        >
-          <DialogTitle>{formContent}</DialogTitle>
-        </Dialog>
-      ) : (
-        // PC
-        <Box
-          sx={{
-            position: "fixed",
-            top: 64,
-            right: isEntryDrawerOpen ? formWidth : 0, // フォームの位置を調整
-            width: formWidth,
-            height: "100%",
-            bgcolor: "background.paper",
-            zIndex: (theme) => theme.zIndex.drawer - 1,
-            transition: (theme) =>
-              theme.transitions.create("right", {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-              }),
-            p: 2, // 内部の余白
-            boxSizing: "border-box", // ボーダーとパディングをwidthに含める
-            boxShadow: "0px 0px 15px -5px #777777",
-          }}
-        >
-          {formContent}
-        </Box>
-      )}
-    </>
+    <Dialog
+      open={isDialogOpen}
+      onClose={onCloseForm}
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle>{formContent}</DialogTitle>
+    </Dialog>
   );
 }

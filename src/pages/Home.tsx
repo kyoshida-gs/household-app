@@ -9,16 +9,13 @@ import TransactionForm from "@/components/TransactionForm";
 import TransactionMenu from "@/components/TransactionMenu";
 import type { Transaction } from "@/types";
 
-import { useAppContext } from "@/hooks/useAppContext";
 import useMonthlyTransaction from "@/hooks/useMonthlyTransaction";
 
 export default function Home() {
-  const { isMobile } = useAppContext();
   const monthlyTransactions = useMonthlyTransaction();
 
   const today = format(new Date(), "yyyy-MM-dd");
   const [currentDay, setCurrentDay] = useState(today);
-  const [isEntryDrawerOpen, setIsEntryDrawerOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
 
@@ -35,36 +32,19 @@ export default function Home() {
 
   const closeForm = () => {
     setSelectedTransaction(null);
-
-    if (isMobile) {
-      setIsDialogOpen(false);
-    } else {
-      setIsEntryDrawerOpen(false);
-    }
+    setIsDialogOpen(false);
   };
 
   // フォームの開閉処理
   const handleAddTransactionForm = () => {
-    if (isMobile) {
-      setIsDialogOpen(true);
-    } else {
-      if (selectedTransaction) {
-        setSelectedTransaction(null);
-      } else {
-        setIsEntryDrawerOpen(!isEntryDrawerOpen);
-      }
-    }
+    setSelectedTransaction(null);
+    setIsDialogOpen(true);
   };
 
   // 取引が選択された時の処理
   const handleSelectTransaction = (transaction: Transaction) => {
     setSelectedTransaction(transaction);
-
-    if (isMobile) {
-      setIsDialogOpen(true);
-    } else {
-      setIsEntryDrawerOpen(true);
-    }
+    setIsDialogOpen(true);
   };
 
   // 日付を選択した時の処理
@@ -105,7 +85,6 @@ export default function Home() {
         <TransactionForm
           onCloseForm={closeForm}
           currentDay={currentDay}
-          isEntryDrawerOpen={isEntryDrawerOpen}
           selectedTransaction={selectedTransaction}
           setSelectedTransaction={setSelectedTransaction}
           isDialogOpen={isDialogOpen}
