@@ -25,3 +25,6 @@ dist-ssr
 
 # 追加分
 src/firebase.ts
+.firebase/*
+.firebaserc
+firebase.json
