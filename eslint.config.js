@@ -36,7 +36,7 @@ export default defineConfig([
     rules: {
       "@typescript-eslint/no-unused-vars": [
         "warn",
-        { "args": "all" },
+        { "args": "all", "argsIgnorePattern": "^_" },
       ],
     },
   },
