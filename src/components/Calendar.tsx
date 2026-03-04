@@ -97,6 +97,7 @@ export default function Calendar({
       eventContent={renderEventContent}
       datesSet={handleDatesSet}
       dateClick={handleDateClick}
+      height="auto"
     />
   );
 }
